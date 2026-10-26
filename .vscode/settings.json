@@ -1,0 +1,5 @@
+{
+    "appService.preDeployTask": "publish-release",
+    "appService.deploySubpath": "BPCalculator/bin/Release/net9.0/publish",
+    "appService.defaultWebAppToDeploy": "/subscriptions/a1520e55-1e97-4054-913a-8a22af4c681f/resourceGroups/az-bp-calculator-ca1/providers/Microsoft.Web/sites/bpcalculatorca1"
+}
