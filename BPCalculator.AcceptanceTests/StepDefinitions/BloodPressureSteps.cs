@@ -44,6 +44,13 @@ public sealed class BloodPressureSteps
         if (OperatingSystem.IsLinux())
         {
             chromeOptions.AddArgument("--disable-dev-shm-usage");
+            if (string.Equals(
+                    Environment.GetEnvironmentVariable("GITHUB_ACTIONS"),
+                    "true",
+                    StringComparison.OrdinalIgnoreCase))
+            {
+                chromeOptions.AddArgument("--no-sandbox");
+            }
         }
 
         var chromeBinary = Environment.GetEnvironmentVariable("CHROME_BIN");
@@ -171,7 +178,15 @@ public sealed class BloodPressureSteps
     private IWebDriver Driver =>
         _driver ?? throw new InvalidOperationException("The calculator browser has not been opened.");
 
-    private WebDriverWait Wait => new(Driver, TimeSpan.FromSeconds(10));
+    private WebDriverWait Wait
+    {
+        get
+        {
+            var wait = new WebDriverWait(Driver, TimeSpan.FromSeconds(10));
+            wait.IgnoreExceptionTypes(typeof(StaleElementReferenceException));
+            return wait;
+        }
+    }
 
     private IWebElement WaitForDisplayed(By selector) =>
         Wait.Until(driver => driver.FindElements(selector).FirstOrDefault(element => element.Displayed))
