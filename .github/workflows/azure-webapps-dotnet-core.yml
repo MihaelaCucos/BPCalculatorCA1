@@ -64,7 +64,7 @@ jobs:
           name: .net-app
           path: ${{ env.AZURE_WEBAPP_PACKAGE_PATH }}
 
-  test:
+  unit-tests:
     runs-on: ubuntu-latest
 
     steps:
@@ -76,13 +76,27 @@ jobs:
           dotnet-version: ${{ env.DOTNET_VERSION }}
 
       - name: Run unit tests
-        run: dotnet test BPCalculator.Tests/BPCalculator.Tests.csproj --configuration Release
+        run: dotnet test BPCalculator.Tests/BPCalculator.Tests.csproj --configuration Release --filter "TestCategory=Unit"
+
+  integration-tests:
+    runs-on: ubuntu-latest
+
+    steps:
+      - uses: actions/checkout@v4
+
+      - name: Set up .NET
+        uses: actions/setup-dotnet@v4
+        with:
+          dotnet-version: ${{ env.DOTNET_VERSION }}
+
+      - name: Run integration tests
+        run: dotnet test BPCalculator.Tests/BPCalculator.Tests.csproj --configuration Release --filter "TestCategory=Integration"
 
   deploy:
     permissions:
       contents: none
     runs-on: ubuntu-latest
-    needs: [build, test]
+    needs: [build, unit-tests, integration-tests]
     environment:
       name: 'Development'
       url: ${{ steps.deploy-to-webapp.outputs.webapp-url }}
