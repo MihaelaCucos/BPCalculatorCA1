@@ -11,11 +11,16 @@ public sealed class BloodPressureCategoryTests
     [DataRow(90, 50, BPCategory.Ideal)]
     [DataRow(80, 60, BPCategory.Ideal)]
     [DataRow(119, 79, BPCategory.Ideal)]
+    [DataRow(90, 59, BPCategory.Ideal)]
+    [DataRow(89, 60, BPCategory.Ideal)]
     [DataRow(120, 70, BPCategory.PreHigh)]
+    [DataRow(120, 79, BPCategory.PreHigh)]
     [DataRow(110, 80, BPCategory.PreHigh)]
+    [DataRow(119, 80, BPCategory.PreHigh)]
     [DataRow(139, 89, BPCategory.PreHigh)]
     [DataRow(140, 70, BPCategory.High)]
     [DataRow(110, 90, BPCategory.High)]
+    [DataRow(139, 90, BPCategory.High)]
     public void Category_ReturnsExpectedCategory(
         int systolic,
         int diastolic,
